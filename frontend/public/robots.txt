@@ -3,4 +3,23 @@ Allow: /
 Disallow: /api/
 Disallow: /history
 
+# AI 爬虫 — 允许 ChatGPT/Perplexity/Google AI 引用本站内容
+User-agent: GPTBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+User-agent: Google-Extended
+Allow: /
+
+User-agent: Anthropic-ai
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
 Sitemap: https://videograb.app/sitemap.xml

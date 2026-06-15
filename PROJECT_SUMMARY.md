@@ -503,7 +503,7 @@ cd backend && python app.py
 
 ## 遇到的问题
 
-详见 [ISSUES_AND_FIXES.md](ISSUES_AND_FIXES.md)，共记录 23 个问题及修复方案。
+详见 [ISSUES_AND_FIXES.md](ISSUES_AND_FIXES.md)，共记录 27 个问题及修复方案。
 
 关键问题：
 1. B站 412 反爬 → 自定义 API 处理器

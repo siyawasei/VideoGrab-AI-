@@ -365,3 +365,83 @@ if not subtitle_list:
 | `frontend/src/components/Navbar.vue` | Cookies上传+SESSDATA配置入口 |
 | `frontend/src/components/PlatformsSection.vue` | API实时平台状态 |
 | `ISSUES_AND_FIXES.md` | 问题记录文档（持续更新） |
+
+---
+
+## 24. Mermaid 思维导图动态导入失败
+
+**现象**: 浏览器报错 `Failed to fetch dynamically imported module: http://localhost:8000/assets/mermaid.core-xxx.js`，思维导图无法渲染，下载按钮无反应。
+
+**原因**: Vite 构建时 mermaid 被拆分为独立 chunk，浏览器缓存了旧的 index.html（引用旧 hash 的 chunk 文件），导致请求的 JS 文件不存在。
+
+**修复**:
+1. 添加模块缓存：首次加载成功后缓存 mermaid 模块实例，避免重复导入
+2. CDN 兜底：动态导入失败时自动从 `cdn.jsdelivr.net/npm/mermaid@11` 加载
+3. index.html 添加 `Cache-Control: no-cache` 头，确保更新后立即生效
+
+**涉及文件**:
+| 文件 | 变更 |
+|------|------|
+| `backend/app.py` | SPA 兜底路由中 index.html 添加 no-cache 头 |
+| `frontend/src/components/VideoSummary.vue` | mermaid 模块缓存 + CDN 兜底 + 下载错误提示 |
+
+---
+
+## 25. 思维导图下载无反应
+
+**现象**: 点击思维导图的 SVG/PNG 下载按钮没有反应，没有文件下载。
+
+**原因**:
+1. SVG 序列化时缺少 `xmlns` 声明，浏览器 Image 拒绝加载，canvas 静默失败
+2. `canvas.toBlob()` 返回 null 时没有错误提示
+3. 使用 blob URL 方式在某些浏览器中被阻止
+
+**修复**:
+1. 克隆 SVG 后手动补上 `xmlns="http://www.w3.org/2000/svg"` 和 `xmlns:xlink`
+2. 改用 base64 data URL 替代 blob URL（`btoa(unescape(encodeURIComponent(svgData)))`）
+3. 下载函数添加用户可见的错误提示（`alert()`）
+4. PNG 生成失败时提示用户使用 SVG 格式
+
+**涉及文件**:
+| 文件 | 变更 |
+|------|------|
+| `frontend/src/components/VideoSummary.vue` | downloadMindmapSvg/Png 重写，补 xmlns，base64 编码，错误提示 |
+
+---
+
+## 26. 模态框打开时背景页面可滚动
+
+**现象**: 打开登录弹窗或下载弹窗后，滑动滚轮会导致背景的主页跟着滚动，体验不佳。
+
+**原因**: 固定定位的模态框（`position: fixed`）不会阻止父级滚动事件传播。
+
+**修复**: 在 LoginModal 和 DownloadModal 中添加 `watch`，当 `visible` 变为 true 时设置 `document.body.style.overflow = 'hidden'` 锁定背景，关闭时恢复为空字符串。
+
+**涉及文件**:
+| 文件 | 变更 |
+|------|------|
+| `frontend/src/components/LoginModal.vue` | watch visible → body overflow 控制 |
+| `frontend/src/components/DownloadModal.vue` | watch visible → body overflow 控制 |
+
+---
+
+## 27. 配置文件硬编码敏感信息
+
+**现象**: `config.py` 中硬编码了数据库密码 `123456`、JWT 密钥 `your-secret-key-change-in-production`，提交到 git 会泄露。
+
+**原因**: 开发阶段直接写死了配置值，没有使用环境变量。
+
+**修复**:
+1. 所有敏感配置改为 `os.getenv()` 读取环境变量
+2. JWT 密钥未设置时自动生成随机密钥（`secrets.token_hex(32)`）
+3. 安装 `python-dotenv`，`app.py` 启动时自动加载 `backend/.env` 文件
+4. 创建 `.env.example` 模板（提交到 git，不含真实密钥）
+5. `.gitignore` 全面覆盖：`*.env`、`cookies/*`、`deepseek_key.txt`、`page_debug.html`
+
+**涉及文件**:
+| 文件 | 变更 |
+|------|------|
+| `backend/config.py` | 所有敏感值改为 `os.getenv()` |
+| `backend/app.py` | 添加 `python-dotenv` 自动加载 `.env` |
+| `backend/.env.example` | 新建，配置模板（无真实密钥） |
+| `.gitignore` | 全面覆盖敏感文件 |

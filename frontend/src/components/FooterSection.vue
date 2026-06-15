@@ -10,6 +10,7 @@
       <p class="text-gray-500 text-sm">&copy; 2026 VideoGrab. All rights reserved.</p>
       <div class="flex gap-6 text-sm text-gray-500">
         <a href="/features" class="hover:text-gray-900 transition-colors">功能介绍</a>
+        <a href="/compare" class="hover:text-gray-900 transition-colors">工具对比</a>
         <a href="/faq" class="hover:text-gray-900 transition-colors">常见问题</a>
         <a href="#" class="hover:text-gray-900 transition-colors">使用条款</a>
         <a href="#" class="hover:text-gray-900 transition-colors">隐私政策</a>

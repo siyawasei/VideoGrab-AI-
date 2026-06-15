@@ -11,9 +11,19 @@ build/
 backend/downloads/*
 !backend/downloads/.gitkeep
 
-# Cookies（敏感信息）
+# Cookies 和敏感配置
 backend/cookies/*
 !backend/cookies/.gitkeep
+
+# 密钥和敏感文件
+*.key
+*.pem
+*.env
+.env
+.env.local
+.env.production
+deepseek_key.txt
+smtp_config.txt
 
 # Node
 frontend/node_modules/
@@ -33,7 +43,8 @@ Thumbs.db
 *.log
 server.log
 
-# 环境变量
-.env
-.env.local
-deepseek_key.txt
+# Claude Code
+.claude/
+
+# 调试文件
+page_debug.html

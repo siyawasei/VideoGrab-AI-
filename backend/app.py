@@ -6,6 +6,11 @@ from contextlib import asynccontextmanager
 sys.stdout.reconfigure(encoding="utf-8")
 
 import os
+from dotenv import load_dotenv
+
+# 自动加载 .env 文件中的环境变量
+load_dotenv(os.path.join(os.path.dirname(__file__), ".env"))
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, Response
@@ -61,6 +66,17 @@ async def features_page():
 @app.get("/faq.html", response_class=HTMLResponse)
 async def faq_page():
     path = os.path.join(_FRONTEND_PUBLIC, "faq.html")
+    if os.path.exists(path):
+        with open(path, encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse(content="<h1>Not Found</h1>", status_code=404)
+
+
+@app.get("/compare", response_class=HTMLResponse)
+@app.get("/compare.html", response_class=HTMLResponse)
+async def compare_page():
+    """工具对比页 — GEO 核心页面"""
+    path = os.path.join(_FRONTEND_PUBLIC, "compare.html")
     if os.path.exists(path):
         with open(path, encoding="utf-8") as f:
             return HTMLResponse(content=f.read())

@@ -19,6 +19,15 @@
     <!-- 功能特性 -->
     <FeaturesSection />
 
+    <!-- 功能分块展示 -->
+    <FeatureShowcase />
+
+    <!-- 使用说明 -->
+    <HowToSection />
+
+    <!-- 竞品对比 -->
+    <ComparisonSection />
+
     <!-- 使用步骤 -->
     <StepsSection />
 
@@ -46,6 +55,9 @@ import { useDownloader } from '@/composables/useDownloader'
 import HeroSection from '@/components/HeroSection.vue'
 import ProgressPanel from '@/components/ProgressPanel.vue'
 import FeaturesSection from '@/components/FeaturesSection.vue'
+import FeatureShowcase from '@/components/FeatureShowcase.vue'
+import HowToSection from '@/components/HowToSection.vue'
+import ComparisonSection from '@/components/ComparisonSection.vue'
 import StepsSection from '@/components/StepsSection.vue'
 import PricingSection from '@/components/PricingSection.vue'
 import PlatformsSection from '@/components/PlatformsSection.vue'

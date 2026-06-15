@@ -13,6 +13,7 @@
       <div class="hidden md:flex items-center gap-6">
         <router-link to="/" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">首页</router-link>
         <a href="/features" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">功能介绍</a>
+        <a href="/compare" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">工具对比</a>
         <a href="/faq" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">常见问题</a>
         <router-link to="/history" class="text-sm text-gray-600 hover:text-gray-900 transition-colors">下载历史</router-link>
       </div>

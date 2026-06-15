@@ -35,6 +35,7 @@ export default {
   // 认证
   login: (data) => http.post('/auth/login', data),
   register: (data) => http.post('/auth/register', data),
+  sendCode: (email) => http.post('/auth/send-code', { email }),
   getMe: () => http.get('/auth/me'),
 
   // 视频解析和下载

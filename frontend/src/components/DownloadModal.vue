@@ -93,7 +93,7 @@
 </template>
 
 <script setup>
-import { ref, computed } from 'vue'
+import { ref, computed, watch } from 'vue'
 import VideoSummary from './VideoSummary.vue'
 
 const props = defineProps({
@@ -104,6 +104,11 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['close', 'download'])
+
+// 阻止背景页面滚动
+watch(() => props.visible, (val) => {
+  document.body.style.overflow = val ? 'hidden' : ''
+})
 
 const selectedFormat = ref(null)
 

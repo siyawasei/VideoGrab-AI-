@@ -17,11 +17,13 @@ export const useUserStore = defineStore('user', () => {
     return res
   }
 
-  async function register(username, email, password) {
-    const res = await api.register({ username, email, password })
-    token.value = res.data.token
-    user.value = res.data.user
-    localStorage.setItem('token', res.data.token)
+  async function register(username, password) {
+    const res = await api.register({ username, password })
+    return res
+  }
+
+  async function sendCode(email) {
+    const res = await api.sendCode(email)
     return res
   }
 
@@ -46,5 +48,5 @@ export const useUserStore = defineStore('user', () => {
     fetchUser()
   }
 
-  return { token, user, isLoggedIn, membership, login, register, fetchUser, logout }
+  return { token, user, isLoggedIn, membership, login, register, sendCode, fetchUser, logout }
 })
