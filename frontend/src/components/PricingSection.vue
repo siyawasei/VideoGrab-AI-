@@ -4,42 +4,41 @@
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">
         选择适合你的 <span class="gradient-text">套餐</span>
       </h2>
-      <p class="text-gray-400 text-center mb-12">灵活定价，按需选择</p>
+      <p class="text-gray-500 text-center mb-12">灵活定价，按需选择</p>
 
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         <!-- 免费版 -->
-        <div class="glass-card !p-6 flex flex-col">
-          <h3 class="text-xl font-bold text-white mb-1">免费版</h3>
+        <div class="bg-white border border-gray-200 rounded-2xl !p-6 flex flex-col">
+          <h3 class="text-xl font-bold text-gray-800 mb-1">免费版</h3>
           <p class="text-gray-400 text-sm mb-6">适合轻度使用</p>
           <div class="mb-6">
-            <span class="text-3xl font-bold text-white">¥0</span>
+            <span class="text-3xl font-bold text-gray-800">¥0</span>
             <span class="text-gray-400 text-sm">/永久</span>
           </div>
           <ul class="space-y-3 flex-1 mb-6">
-            <li v-for="f in freeFeatures" :key="f" class="flex items-center gap-2 text-sm text-gray-300">
-              <span class="text-green-400">✓</span>{{ f }}
+            <li v-for="f in freeFeatures" :key="f" class="flex items-center gap-2 text-sm text-gray-600">
+              <span class="text-green-500">✓</span>{{ f }}
             </li>
           </ul>
-          <button class="w-full py-3 rounded-xl border border-white/20 text-white text-sm font-medium hover:bg-white/5 transition-colors">
+          <button class="w-full py-3 rounded-xl border border-gray-200 text-gray-600 text-sm font-medium hover:bg-gray-50 transition-colors">
             当前方案
           </button>
         </div>
 
         <!-- Pro 版（推荐） -->
-        <div class="glass-card !p-6 flex flex-col relative glow-border !border-purple-primary/30">
-          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold"
-               style="background: linear-gradient(135deg, #7c3aed, #3b82f6); color: white">
+        <div class="bg-white border-2 border-blue-500 rounded-2xl !p-6 flex flex-col relative shadow-lg">
+          <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full text-xs font-bold bg-blue-600 text-white">
             最受欢迎
           </div>
           <h3 class="text-xl font-bold gradient-text mb-1">Pro 版</h3>
           <p class="text-gray-400 text-sm mb-6">适合高频下载用户</p>
           <div class="mb-6">
-            <span class="text-3xl font-bold text-white">¥19.9</span>
+            <span class="text-3xl font-bold text-gray-800">¥19.9</span>
             <span class="text-gray-400 text-sm">/月</span>
           </div>
           <ul class="space-y-3 flex-1 mb-6">
-            <li v-for="f in proFeatures" :key="f" class="flex items-center gap-2 text-sm text-gray-300">
-              <span class="text-green-400">✓</span>{{ f }}
+            <li v-for="f in proFeatures" :key="f" class="flex items-center gap-2 text-sm text-gray-600">
+              <span class="text-green-500">✓</span>{{ f }}
             </li>
           </ul>
           <button class="gradient-btn w-full !py-3 text-sm" @click="$emit('subscribe', 'pro')">
@@ -48,19 +47,19 @@
         </div>
 
         <!-- Premium 版 -->
-        <div class="glass-card !p-6 flex flex-col">
-          <h3 class="text-xl font-bold text-gold mb-1">Premium 版</h3>
+        <div class="bg-white border border-gray-200 rounded-2xl !p-6 flex flex-col">
+          <h3 class="text-xl font-bold text-green-700 mb-1">Premium 版</h3>
           <p class="text-gray-400 text-sm mb-6">全能创作者首选</p>
           <div class="mb-6">
-            <span class="text-3xl font-bold text-white">¥49.9</span>
+            <span class="text-3xl font-bold text-gray-800">¥49.9</span>
             <span class="text-gray-400 text-sm">/月</span>
           </div>
           <ul class="space-y-3 flex-1 mb-6">
-            <li v-for="f in premiumFeatures" :key="f" class="flex items-center gap-2 text-sm text-gray-300">
-              <span class="text-gold">✓</span>{{ f }}
+            <li v-for="f in premiumFeatures" :key="f" class="flex items-center gap-2 text-sm text-gray-600">
+              <span class="text-green-500">✓</span>{{ f }}
             </li>
           </ul>
-          <button class="w-full py-3 rounded-xl border border-gold/30 text-gold text-sm font-medium hover:bg-gold/10 transition-colors"
+          <button class="w-full py-3 rounded-xl border border-green-500 text-green-700 text-sm font-medium hover:bg-green-50 transition-colors"
                   @click="$emit('subscribe', 'premium')">
             立即订阅
           </button>

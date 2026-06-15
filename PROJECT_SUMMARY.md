@@ -1,6 +1,6 @@
 # VideoGrab - 万能视频下载器
 
-一个基于 yt-dlp + FastAPI + Vue 3 的在线视频下载工具，支持国内主流平台，深色渐变玻璃拟态 UI。
+一个基于 yt-dlp + FastAPI + Vue 3 的在线视频下载工具，支持国内主流平台，清爽极简白底 UI。集成 AI 视频总结、字幕提取、思维导图等功能。
 
 ## 技术栈
 
@@ -9,6 +9,7 @@
 | 前端 | Vue 3 + Vite + Tailwind CSS 4 + Pinia + Vue Router |
 | 后端 | Python FastAPI + yt-dlp 2026.06.09 |
 | 数据库 | MySQL 8 (localhost:3306) |
+| AI 大模型 | DeepSeek API (deepseek-chat) |
 | 实时进度 | Server-Sent Events (SSE) |
 | 视频处理 | ffmpeg（音视频合并、TS→MP4 转封装） |
 
@@ -266,12 +267,21 @@ B站 URL (bilibili.com / b23.tv)
 ## 功能特性
 
 ### 核心功能
-- 视频链接解析（支持 1000+ 平台）
-- 多画质选择（4K/1080p/720p/480p/360p）
+- 视频链接解析（支持 1800+ 平台）
+- 多画质选择（8K/4K/1080p/720p/480p/360p）
 - 实时下载进度（SSE 推送）
 - 音视频自动合并（DASH 格式）
 - TS→MP4 自动转封装（HLS 格式）
 - 下载完成后直接保存文件
+
+### AI 智能功能（v2.0 新增）
+- AI 视频内容总结（DeepSeek 大模型，流式输出）
+- 自动章节时间线划分（带时间戳）
+- 关键要点提取（3-7 个核心知识点）
+- 思维导图生成（Mermaid mindmap，支持全屏+SVG/PNG下载）
+- AI 问答对话（基于视频内容的多轮对话）
+- 字幕自动获取与下载（B站 `/x/v2/dm/view` API，无需 SESSDATA）
+- SRT 字幕文件导出
 
 ### 平台支持
 - B站专用 API 处理器（绕过 412 反爬）
@@ -287,11 +297,34 @@ B站 URL (bilibili.com / b23.tv)
 - Cookies 上传（解锁更多平台）
 - B站 SESSDATA 配置（解锁高清画质）
 
-### UI 设计
-- 深色渐变背景 + 玻璃拟态卡片
+### 用户系统
+- 注册/登录（JWT 认证，支持邮箱登录）
+- 下载历史记录
+- 会员套餐展示（免费/Pro/Premium）
+- Cookies 上传（解锁更多平台）
+- B站 SESSDATA 配置（解锁高清画质）
+
+### UI 设计（v2.0 重新设计）
+- 清爽极简白底设计（#f8fafc 浅灰背景）
+- 深蓝主色（#2563eb）+ 翠绿强调（#10b981）
+- 双栏弹窗布局（左栏视频信息+下载，右栏 AI 总结）
+- 移动端底部弹出式弹窗
 - 响应式布局（手机/平板/电脑）
 - 视频信息丰富展示（封面/UP主/播放量/弹幕/描述）
 - 平台状态实时指示灯
+
+### SEO 优化（v2.0 新增）
+- robots.txt + sitemap.xml
+- Open Graph + Twitter Card 标签
+- JSON-LD 结构化数据（WebSite + WebApplication）
+- 静态 HTML 内容页（/features, /faq，可被搜索引擎直接索引）
+- FAQ 页含 FAQPage schema（搜索结果富片段）
+- OG 预览图（SVG 格式）
+
+### 部署架构
+- 前后端统一端口（FastAPI 服务 Vue 构建产物，单端口 8000）
+- SPA 兜底路由（Vue Router HTML5 history mode）
+- 静态资源带 hash 缓存
 
 ## 支持平台
 
@@ -314,37 +347,60 @@ B站 URL (bilibili.com / b23.tv)
 ```
 AI_video/
 ├── backend/
-│   ├── app.py                  # FastAPI 主入口
-│   ├── config.py               # 配置（数据库、JWT、路径）
+│   ├── app.py                  # FastAPI 主入口（前后端统一端口）
+│   ├── config.py               # 配置（数据库、JWT、DeepSeek、路径）
 │   ├── database.py             # SQLAlchemy 连接
 │   ├── models.py               # 数据模型（users/download_history/orders）
 │   ├── requirements.txt        # Python 依赖
 │   ├── api/
-│   │   ├── auth.py             # 认证 API（注册/登录/JWT）
-│   │   ├── bilibili.py         # B站专用处理器（API解析+DASH下载+CDN备用）
+│   │   ├── auth.py             # 认证 API（注册/登录/JWT/邮箱登录）
+│   │   ├── bilibili.py         # B站专用处理器（API解析+DASH下载+CDN备用+字幕获取）
 │   │   ├── downloader.py       # yt-dlp 封装（平台检测+URL规范化+格式处理）
 │   │   ├── history.py          # 下载历史 API
-│   │   └── routes.py           # 主路由（解析/下载/SSE进度/文件获取/Cookie/平台状态）
+│   │   ├── routes.py           # 主路由（解析/下载/SSE进度/文件获取/Cookie/平台状态）
+│   │   ├── ai.py               # AI 总结+问答 API（DeepSeek SSE 流式）
+│   │   └── subtitle.py         # 字幕获取统一接口（B站API+yt-dlp+兜底）
 │   ├── cookies/                # cookies 存储目录
 │   └── downloads/              # 视频下载临时目录
 │
 ├── frontend/
+│   ├── public/
+│   │   ├── favicon.ico         # 网站图标
+│   │   ├── favicon.svg         # SVG 网站图标
+│   │   ├── og-image.svg        # OG 预览图
+│   │   ├── robots.txt          # 爬虫规则
+│   │   ├── sitemap.xml         # 站点地图
+│   │   ├── features.html       # 功能介绍页（SEO 静态页）
+│   │   └── faq.html            # FAQ 页（SEO 静态页 + FAQ 富片段）
 │   ├── src/
 │   │   ├── App.vue             # 根组件
 │   │   ├── main.js             # 入口
-│   │   ├── api/index.js        # Axios API 封装
-│   │   ├── assets/main.css     # Tailwind + 自定义样式
-│   │   ├── components/         # 12 个 Vue 组件
-│   │   ├── composables/        # useDownloader.js
+│   │   ├── api/index.js        # Axios + fetch SSE API 封装
+│   │   ├── assets/main.css     # Tailwind + 自定义样式（极简白主题）
+│   │   ├── components/
+│   │   │   ├── Navbar.vue          # 导航栏
+│   │   │   ├── HeroSection.vue     # 首屏输入区
+│   │   │   ├── DownloadModal.vue   # 视频信息+下载弹窗（双栏布局）
+│   │   │   ├── VideoSummary.vue    # AI 总结组件（4Tab: 总结/导图/字幕/问答）
+│   │   │   ├── ProgressPanel.vue   # 下载进度
+│   │   │   ├── FeaturesSection.vue # 功能特性
+│   │   │   ├── StepsSection.vue    # 使用步骤
+│   │   │   ├── PricingSection.vue  # 定价
+│   │   │   ├── PlatformsSection.vue # 平台状态
+│   │   │   ├── FooterSection.vue   # 页脚
+│   │   │   └── LoginModal.vue      # 登录/注册弹窗
+│   │   ├── composables/
+│   │   │   ├── useDownloader.js    # 下载逻辑
+│   │   │   └── useAiSummary.js     # AI 总结逻辑（SSE 消费+状态管理）
 │   │   ├── router/index.js     # Vue Router
 │   │   ├── stores/user.js      # Pinia 状态管理
 │   │   └── views/              # 页面视图
-│   ├── index.html
+│   ├── index.html              # HTML 入口（SEO meta/OG/JSON-LD）
 │   ├── vite.config.js
 │   └── package.json
 │
 ├── README.md                   # 项目说明
-├── ISSUES_AND_FIXES.md         # 问题记录（22 条）
+├── ISSUES_AND_FIXES.md         # 问题记录
 └── PROJECT_SUMMARY.md          # 本文档
 ```
 
@@ -368,25 +424,23 @@ CREATE DATABASE video_downloader CHARACTER SET utf8mb4 COLLATE utf8mb4_general_c
 
 ### 3. 启动服务
 ```bash
-# 后端（端口 8000）
-cd backend
-python app.py
+# 构建前端（只需一次）
+cd frontend && npm run build
 
-# 前端（端口 5173）
-cd frontend
-npm run dev
+# 启动后端（前后端统一端口 8000）
+cd backend && python app.py
 ```
 
 ### 4. 访问
-浏览器打开 `http://localhost:5173`
+浏览器打开 `http://localhost:8000`
 
 ## API 接口
 
 | 接口 | 方法 | 说明 |
 |------|------|------|
-| `/api/auth/register` | POST | 用户注册 |
-| `/api/auth/login` | POST | 用户登录 |
-| `/api/auth/me` | GET | 获取用户信息 |
+| `/api/auth/register` | POST | 用户注册（用户名+邮箱+密码） |
+| `/api/auth/login` | POST | 用户登录（支持用户名或邮箱） |
+| `/api/auth/me` | GET | 获取当前用户信息 |
 | `/api/info` | POST | 解析视频信息 |
 | `/api/download` | POST | 开始下载 |
 | `/api/progress/{task_id}` | GET | SSE 下载进度 |
@@ -396,6 +450,18 @@ npm run dev
 | `/api/cookies/upload` | POST | 上传 cookies.txt |
 | `/api/cookies/status` | GET | cookies 状态 |
 | `/api/bilibili/sessdata` | POST/GET | B站 SESSDATA 配置 |
+| `/api/summarize` | POST | AI 视频总结（SSE 流式） |
+| `/api/ai-chat` | POST | AI 问答（SSE 流式） |
+| `/api/transcript` | POST | 获取视频字幕/转录文本 |
+
+## SEO 页面
+
+| 路径 | 说明 |
+|------|------|
+| `/features` | 功能介绍页（纯 HTML，搜索引擎可直接索引） |
+| `/faq` | FAQ 页（含 FAQPage JSON-LD，搜索结果富片段） |
+| `/robots.txt` | 爬虫规则 |
+| `/sitemap.xml` | 站点地图（3 个 URL） |
 
 ## 技术亮点
 
@@ -421,9 +487,23 @@ npm run dev
 - 分片进度（HLS 下载）
 - 百分比字符串（回退）
 
+### 5. AI 视频总结（v2.0）
+- 字幕获取：B站通过 `/x/v2/dm/view` API（无需 SESSDATA），其他平台通过 yt-dlp
+- LLM 调用：DeepSeek API（1M 上下文，OpenAI 兼容 SDK，流式输出）
+- 思维导图：LLM 生成 Mermaid mindmap 语法，前端 mermaid 库渲染
+- 字幕下载：前端直接将 segments 转为 SRT 格式
+- CDN 兜底：mermaid 动态导入失败时自动从 jsDelivr CDN 加载
+
+### 6. SEO 优化（v2.0）
+- robots.txt + sitemap.xml 引导搜索引擎爬取
+- JSON-LD 结构化数据：WebSite（含 SearchAction）、WebApplication、FAQPage
+- 静态 HTML 内容页：features.html、faq.html（可被 Google 直接索引）
+- OG + Twitter Card 标签：社交分享时显示品牌预览
+- SPA 兜底路由：FastAPI 服务 Vue 构建产物，index.html 设置 no-cache
+
 ## 遇到的问题
 
-详见 [ISSUES_AND_FIXES.md](ISSUES_AND_FIXES.md)，共记录 22 个问题及修复方案。
+详见 [ISSUES_AND_FIXES.md](ISSUES_AND_FIXES.md)，共记录 23 个问题及修复方案。
 
 关键问题：
 1. B站 412 反爬 → 自定义 API 处理器
@@ -431,3 +511,4 @@ npm run dev
 3. YouTube 没声音 → H.264+AAC 格式选择
 4. 芒果TV 下载是 TS 格式 → ffmpeg_location + remux
 5. 腾讯视频下载极慢 → CDN 限速（平台限制）
+6. B站字幕获取失败（需 SESSDATA）→ 改用 `/x/v2/dm/view` API（无需登录）

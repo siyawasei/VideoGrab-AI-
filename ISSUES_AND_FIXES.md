@@ -317,6 +317,48 @@ opts["ffmpeg_location"] = _find_ffmpeg()  # 自动搜索 C:\Program Files\ffmpeg
 | `backend/config.py` | 新增 COOKIES_DIR |
 | `frontend/src/composables/useDownloader.js` | safeStr() 错误处理 |
 | `frontend/src/api/index.js` | API拦截器+cookies/SESSDATA/平台API |
+
+---
+
+## 23. B站字幕获取失败 — `/x/player/v2` 无 SESSDATA 时返回空字幕
+
+**现象**: AI 视频总结功能中，B站视频字幕获取失败。调用 `/x/player/v2` API 返回 `subtitles: []`（空数组），导致 AI 总结只能使用标题+描述，无法生成带时间戳的章节。
+
+**原因**: B站的 `/x/player/v2` 和 `/x/player/wbi/v2` API **必须携带 SESSDATA（登录态）** 才会返回字幕列表。未登录时几乎必定返回空数组，即使视频本身有 AI 自动生成的字幕。
+
+**排查过程**:
+1. 测试 `/x/player/v2?bvid=xxx&cid=xxx` → `subtitles: []`（无 SESSDATA）
+2. 测试 `/x/player/wbi/v2` + WBI 签名 → `subtitles: []`（WBI 签名正确但仍需登录态）
+3. 测试 yt-dlp → `HTTP Error 412`（B站反爬）
+4. 测试页面 HTML 抓取 → B站使用客户端渲染，HTML 中无字幕数据
+5. **最终发现**: `/x/v2/dm/view` API **不需要 SESSDATA** 即可返回字幕列表
+
+**修复**: 在 `bilibili_get_subtitle()` 函数中采用双 API 策略：
+
+```python
+# 方法 1: /x/v2/dm/view API（不需要 SESSDATA，优先使用）
+dm_data = _api_get(f"https://api.bilibili.com/x/v2/dm/view?type=1&oid={cid}&pid={cid}", cookies)
+subtitle_list = dm_data["data"]["subtitle"]["subtitles"]
+
+# 方法 2: /x/player/v2 API（需要 SESSDATA，作为备用）
+if not subtitle_list:
+    player_data = _api_get(f"https://api.bilibili.com/x/player/v2?bvid={bvid}&cid={cid}", cookies)
+    subtitle_list = player_data["data"]["subtitle"]["subtitles"]
+```
+
+**关键技术点**:
+| API | 需要 SESSDATA | 返回字幕 | 用途 |
+|-----|:---:|:---:|------|
+| `/x/player/v2` | ✅ 必须 | 有登录态时返回 | 备用方案 |
+| `/x/player/wbi/v2` | ✅ 必须 | 有登录态时返回 | 备用方案（WBI签名） |
+| `/x/v2/dm/view` | ❌ 不需要 | ✅ 始终返回 | **主要方案** |
+
+字幕 CDN 地址（`aisubtitle.hdslb.com`）本身也不需要认证，只需 `Referer: https://www.bilibili.com` 即可下载。
+
+**涉及文件**:
+| 文件 | 变更 |
+|------|------|
+| `backend/api/bilibili.py` | `bilibili_get_subtitle()` 改用 `/x/v2/dm/view` 为主，`/x/player/v2` 为备 |
 | `frontend/src/views/HomeView.vue` | format_id 转 String |
 | `frontend/src/components/DownloadModal.vue` | 视频信息展示+referrerpolicy+自动合并提示 |
 | `frontend/src/components/HistorySection.vue` | referrerpolicy |

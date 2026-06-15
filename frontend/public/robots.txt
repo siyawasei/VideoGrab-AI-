@@ -1,0 +1,6 @@
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /history
+
+Sitemap: https://videograb.app/sitemap.xml

@@ -1,15 +1,15 @@
 @import "tailwindcss";
 
-/* 自定义主题变量 */
+/* 自定义主题变量 — 清爽极简白 */
 @theme {
-  --color-dark-start: #0a0a1a;
-  --color-dark-end: #1a0a2e;
-  --color-purple-primary: #7c3aed;
+  --color-dark-start: #ffffff;
+  --color-dark-end: #f8fafc;
+  --color-purple-primary: #2563eb;
   --color-blue-primary: #3b82f6;
-  --color-gold: #fbbf24;
-  --color-glass-bg: rgba(255, 255, 255, 0.05);
-  --color-glass-border: rgba(255, 255, 255, 0.1);
-  --color-glass-hover: rgba(255, 255, 255, 0.1);
+  --color-gold: #10b981;
+  --color-glass-bg: #ffffff;
+  --color-glass-border: #e5e7eb;
+  --color-glass-hover: #f9fafb;
   --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
 }
 
@@ -20,25 +20,25 @@ html {
 
 body {
   font-family: var(--font-sans);
-  background: linear-gradient(135deg, var(--color-dark-start) 0%, var(--color-dark-end) 100%);
-  color: #e2e8f0;
+  background: #f8fafc;
+  color: #1f2937;
   min-height: 100vh;
 }
 
-/* 玻璃拟态卡片 */
+/* 玻璃拟态卡片 → 白底卡片 */
 .glass-card {
-  background: var(--color-glass-bg);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--color-glass-border);
+  background: #ffffff;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border: 1px solid #e5e7eb;
   border-radius: 16px;
   transition: all 0.3s ease;
 }
 
 .glass-card:hover {
-  background: var(--color-glass-hover);
+  background: #f9fafb;
   transform: translateY(-4px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
 }
 
 /* 渐变文字 */
@@ -65,7 +65,7 @@ body {
 
 .gradient-btn:hover {
   transform: translateY(-2px);
-  box-shadow: 0 10px 30px rgba(124, 58, 237, 0.4);
+  box-shadow: 0 10px 30px rgba(37, 99, 235, 0.3);
 }
 
 .gradient-btn:disabled {
@@ -94,12 +94,11 @@ body {
   opacity: 1;
 }
 
-/* 动态背景网格 */
+/* 动态背景网格 → 淡灰点阵 */
 .bg-grid {
   background-image:
-    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
-  background-size: 60px 60px;
+    radial-gradient(circle, #d1d5db 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 /* 进度条动画 */
@@ -140,10 +139,10 @@ body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background: rgba(255, 255, 255, 0.1);
+  background: #d1d5db;
   border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: rgba(255, 255, 255, 0.2);
+  background: #9ca3af;
 }

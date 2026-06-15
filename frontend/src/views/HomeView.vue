@@ -32,6 +32,7 @@
     <DownloadModal
       :visible="showModal"
       :info="downloader.videoInfo.value"
+      :url="downloader.parsedUrl.value"
       :downloading="downloader.downloadStatus.value === 'downloading'"
       @close="showModal = false"
       @download="handleDownload"

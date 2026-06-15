@@ -4,15 +4,15 @@
       <h2 class="text-3xl md:text-4xl font-bold text-center mb-4">
         为什么选择 <span class="gradient-text">VideoGrab</span>
       </h2>
-      <p class="text-gray-400 text-center mb-12 max-w-xl mx-auto">一站式解决所有视频下载需求，简单、快速、安全</p>
+      <p class="text-gray-500 text-center mb-12 max-w-xl mx-auto">一站式解决所有视频下载需求，简单、快速、安全</p>
 
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
         <div v-for="(f, i) in features" :key="i"
              class="glass-card !p-6 text-center animate-fade-in-up"
              :style="{ animationDelay: i * 0.1 + 's' }">
           <div class="text-4xl mb-4">{{ f.icon }}</div>
-          <h3 class="text-white font-semibold text-lg mb-2">{{ f.title }}</h3>
-          <p class="text-gray-400 text-sm leading-relaxed">{{ f.desc }}</p>
+          <h3 class="text-gray-800 font-semibold text-lg mb-2">{{ f.title }}</h3>
+          <p class="text-gray-500 text-sm leading-relaxed">{{ f.desc }}</p>
         </div>
       </div>
     </div>

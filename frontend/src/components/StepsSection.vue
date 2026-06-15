@@ -13,8 +13,8 @@
           <div class="w-14 h-14 rounded-full bg-gradient-to-br from-purple-primary to-blue-primary flex items-center justify-center mx-auto mb-4">
             <span class="text-white font-bold text-xl">{{ i + 1 }}</span>
           </div>
-          <h3 class="text-white font-semibold text-lg mb-2">{{ step.title }}</h3>
-          <p class="text-gray-400 text-sm">{{ step.desc }}</p>
+          <h3 class="text-gray-800 font-semibold text-lg mb-2">{{ step.title }}</h3>
+          <p class="text-gray-500 text-sm">{{ step.desc }}</p>
 
           <!-- 箭头（非最后一步） -->
           <div v-if="i < steps.length - 1" class="hidden md:block absolute">

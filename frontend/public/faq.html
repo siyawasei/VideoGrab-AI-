@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>常见问题 - VideoGrab 万能视频下载器</title>
+  <meta name="description" content="VideoGrab 常见问题解答：支持哪些平台？如何下载 B站/YouTube 视频？AI 总结功能怎么用？字幕如何下载？">
+  <meta name="keywords" content="VideoGrab FAQ,视频下载器常见问题,YouTube下载问题,B站下载问题,AI视频总结">
+  <meta name="robots" content="index, follow">
+  <link rel="canonical" href="https://videograb.app/faq">
+  <meta property="og:title" content="常见问题 - VideoGrab">
+  <meta property="og:description" content="VideoGrab 常见问题解答，了解如何使用万能视频下载器。">
+  <meta property="og:url" content="https://videograb.app/faq">
+  <style>
+    body { font-family: 'Inter', system-ui, sans-serif; background: linear-gradient(135deg, #0a0a1a 0%, #1a0a2e 100%); color: #e2e8f0; min-height: 100vh; margin: 0; }
+    .container { max-width: 800px; margin: 0 auto; padding: 80px 20px 40px; }
+    h1 { font-size: 2rem; font-weight: 700; margin-bottom: 1rem; }
+    h1 span { background: linear-gradient(135deg, #7c3aed, #3b82f6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    h2 { font-size: 1.2rem; font-weight: 600; margin-top: 2rem; margin-bottom: 0.5rem; color: #e5e7eb; }
+    p { color: #9ca3af; line-height: 1.8; margin-bottom: 1.5rem; }
+    .back { display: inline-block; margin-bottom: 2rem; color: #7c3aed; text-decoration: none; }
+    .back:hover { text-decoration: underline; }
+    .faq-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06); border-radius: 12px; padding: 20px; margin-bottom: 12px; }
+    .faq-item h3 { color: #e5e7eb; font-size: 1rem; margin-bottom: 0.5rem; }
+    .faq-item p { margin-bottom: 0; font-size: 0.9rem; }
+  </style>
+  <!-- FAQ 结构化数据 — Google 搜索结果中显示为富片段 -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {
+        "@type": "Question",
+        "name": "VideoGrab 支持哪些视频平台？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "VideoGrab 支持 1800+ 视频平台，包括 B站（哔哩哔哩）、YouTube、抖音、Twitter/X、Instagram、TikTok、腾讯视频、优酷、爱奇艺、快手、小红书、Facebook、Vimeo 等国内外主流视频网站。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "VideoGrab 是免费的吗？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "是的，VideoGrab 完全免费使用，无需注册账号。所有核心功能（视频下载、AI 智能总结、字幕提取、思维导图）均免费开放，没有使用次数限制。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "如何下载 B站视频？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "复制 B站视频链接（如 bilibili.com/video/BV...），粘贴到 VideoGrab 输入框，点击「解析视频」，选择画质后点击「开始下载」即可。VideoGrab 使用专用 B站 API，绕过反爬机制，支持最高 8K 画质。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "AI 视频总结功能是什么？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "AI 视频总结基于 DeepSeek 大模型，自动分析视频字幕内容，生成结构化总结，包括：内容摘要、章节时间线、关键要点、思维导图。还支持基于视频内容的 AI 问答对话。适合快速了解长视频的核心内容，提升学习效率。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "字幕如何下载？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "解析视频后，在 AI 总结面板中切换到「字幕」Tab，即可查看带时间戳的字幕列表。点击下载按钮可导出为 SRT 格式字幕文件，支持用记事本或视频播放器打开。B站视频支持自动获取 AI 字幕，无需登录。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "支持哪些画质？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "支持多种画质选择，包括 8K、4K、1080p60、1080p+、1080p、720p60、720p、480p、360p 等。B站还支持 Dolby Vision 和 HDR 画质（需配置 SESSDATA）。系统会自动合并视频流和音频流，输出完整 MP4 文件。"
+        }
+      },
+      {
+        "@type": "Question",
+        "name": "思维导图可以下载吗？",
+        "acceptedAnswer": {
+          "@type": "Answer",
+          "text": "可以。思维导图支持全屏查看（滚轮缩放），并提供 SVG 和 PNG 两种格式下载。SVG 为矢量格式，无限放大不失真；PNG 为 2x 高清位图，深色背景，适合分享。"
+        }
+      }
+    ]
+  }
+  </script>
+</head>
+<body>
+  <div class="container">
+    <a href="/" class="back">&larr; 返回首页</a>
+    <h1>常见问题 <span>FAQ</span></h1>
+    <p>以下是关于 VideoGrab 的常见问题解答。如有其他问题，欢迎反馈。</p>
+
+    <div class="faq-item">
+      <h3>VideoGrab 支持哪些视频平台？</h3>
+      <p>支持 1800+ 平台，包括 B站、YouTube、抖音、Twitter/X、Instagram、TikTok、腾讯视频、优酷、爱奇艺、快手、小红书、Facebook、Vimeo 等国内外主流视频网站。</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>VideoGrab 是免费的吗？</h3>
+      <p>是的，完全免费，无需注册。所有核心功能（视频下载、AI 总结、字幕提取、思维导图）均免费开放，无使用次数限制。</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>如何下载 B站视频？</h3>
+      <p>复制 B站视频链接（如 bilibili.com/video/BV...），粘贴到输入框，点击「解析视频」，选择画质后点击「开始下载」。使用专用 B站 API，支持最高 8K 画质。</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>AI 视频总结功能是什么？</h3>
+      <p>基于 DeepSeek 大模型，自动分析视频字幕，生成内容摘要、章节时间线、关键要点、思维导图。还支持基于视频内容的 AI 问答，适合快速了解长视频核心内容。</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>字幕如何下载？</h3>
+      <p>解析视频后，在「字幕」Tab 查看带时间戳的字幕列表，点击下载按钮导出 SRT 格式文件。B站视频支持自动获取 AI 字幕，无需登录。</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>支持哪些画质？</h3>
+      <p>支持 8K、4K、1080p60、1080p+、1080p、720p60、720p、480p、360p 等。B站还支持 Dolby Vision 和 HDR。系统自动合并视频+音频流，输出完整 MP4。</p>
+    </div>
+
+    <div class="faq-item">
+      <h3>思维导图可以下载吗？</h3>
+      <p>可以。支持全屏查看和滚轮缩放，提供 SVG（矢量）和 PNG（2x 高清）两种格式下载。</p>
+    </div>
+
+    <p style="margin-top:2rem"><a href="/" style="color:#7c3aed">立即使用 VideoGrab &rarr;</a></p>
+  </div>
+</body>
+</html>

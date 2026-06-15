@@ -315,3 +315,112 @@ def bilibili_merge_streams(video_path: str, audio_path: str, output_path: str) -
     result = subprocess.run(cmd, capture_output=True, text=True)
     if result.returncode != 0:
         raise Exception(f"ffmpeg 合并失败: {result.stderr[:200]}")
+
+
+def bilibili_get_subtitle(bvid: str, cid: int, cookies: dict = None) -> dict | None:
+    """获取 Bilibili 视频的字幕内容（用于 AI 总结）
+
+    优先使用 /x/v2/dm/view API（不需要 SESSDATA），失败则回退到 /x/player/v2。
+
+    Returns:
+        {
+            "segments": [{"from": 0.0, "to": 5.0, "content": "..."}],
+            "text": "纯文本字幕",
+            "language": "ai-zh",
+        }
+        无字幕时返回 None
+    """
+    if not cookies:
+        cookies = {}
+        buvid3, buvid4 = _get_buvid()
+        cookies["buvid3"] = buvid3
+        cookies["buvid4"] = buvid4
+        sessdata = _load_sessdata()
+        if sessdata:
+            cookies["SESSDATA"] = sessdata
+
+    # 方法 1: /x/v2/dm/view API（不需要 SESSDATA，优先使用）
+    subtitle_list = []
+    try:
+        dm_data = _api_get(
+            f"https://api.bilibili.com/x/v2/dm/view?type=1&oid={cid}&pid={cid}",
+            cookies,
+        )
+        if dm_data.get("code") == 0:
+            subtitle_list = dm_data.get("data", {}).get("subtitle", {}).get("subtitles", [])
+    except Exception:
+        pass
+
+    # 方法 2: /x/player/v2 API（需要 SESSDATA，作为备用）
+    if not subtitle_list:
+        try:
+            player_data = _api_get(
+                f"https://api.bilibili.com/x/player/v2?bvid={bvid}&cid={cid}",
+                cookies,
+            )
+            if player_data.get("code") == 0:
+                subtitle_list = player_data.get("data", {}).get("subtitle", {}).get("subtitles", [])
+        except Exception:
+            pass
+
+    if not subtitle_list:
+        return None
+
+    # 优先选择: ai-zh > zh-CN > zh > 第一个
+    target = None
+    for sub in subtitle_list:
+        if sub.get("lan") == "ai-zh":
+            target = sub
+            break
+    if not target:
+        for sub in subtitle_list:
+            if sub.get("lan") == "zh-CN":
+                target = sub
+                break
+    if not target:
+        for sub in subtitle_list:
+            if sub.get("lan", "").startswith("zh"):
+                target = sub
+                break
+    if not target:
+        target = subtitle_list[0]
+
+    subtitle_url = target.get("subtitle_url", "")
+    if not subtitle_url:
+        return None
+
+    # 补全协议
+    if subtitle_url.startswith("//"):
+        subtitle_url = "https:" + subtitle_url
+    elif subtitle_url.startswith("http://"):
+        subtitle_url = subtitle_url.replace("http://", "https://")
+
+    # 下载字幕 JSON
+    try:
+        headers = dict(HEADERS)
+        req = urllib.request.Request(subtitle_url, headers=headers)
+        resp = urllib.request.urlopen(req, timeout=15)
+        subtitle_data = json.loads(resp.read())
+    except Exception:
+        return None
+
+    body = subtitle_data.get("body", [])
+    if not body:
+        return None
+
+    segments = []
+    text_parts = []
+    for item in body:
+        seg = {
+            "from": item.get("from", 0.0),
+            "to": item.get("to", 0.0),
+            "content": item.get("content", ""),
+        }
+        segments.append(seg)
+        text_parts.append(seg["content"])
+
+    return {
+        "segments": segments,
+        "text": " ".join(text_parts),
+        "language": target.get("lan", "unknown"),
+    }

@@ -9,8 +9,8 @@ export const useUserStore = defineStore('user', () => {
   const isLoggedIn = computed(() => !!token.value)
   const membership = computed(() => user.value?.membership || 'free')
 
-  async function login(username, password) {
-    const res = await api.login({ username, password })
+  async function login(account, password) {
+    const res = await api.login({ account, password })
     token.value = res.data.token
     user.value = res.data.user
     localStorage.setItem('token', res.data.token)

@@ -27,3 +27,13 @@ MEMBERSHIP_LIMITS = {
     "pro": {"daily_downloads": 9999, "max_quality": "2160p"},
     "premium": {"daily_downloads": 9999, "max_quality": "2160p"},
 }
+
+# DeepSeek API 配置（AI 视频总结功能）
+# 优先从环境变量读取，其次从 cookies/deepseek_key.txt 文件读取
+_deepseek_key_file = os.path.join(os.path.dirname(__file__), "cookies", "deepseek_key.txt")
+DEEPSEEK_API_KEY = os.getenv("DEEPSEEK_API_KEY", "")
+if not DEEPSEEK_API_KEY and os.path.exists(_deepseek_key_file):
+    with open(_deepseek_key_file) as _f:
+        DEEPSEEK_API_KEY = _f.read().strip()
+DEEPSEEK_BASE_URL = "https://api.deepseek.com"
+DEEPSEEK_MODEL = "deepseek-chat"

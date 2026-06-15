@@ -8,11 +8,11 @@
     <!-- 平台状态网格 -->
     <div class="max-w-4xl mx-auto grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 mb-8">
       <div v-for="p in platforms" :key="p.name"
-           class="glass-card !p-3 flex items-center gap-2.5 !hover:transform-none">
+           class="bg-white border border-gray-200 rounded-xl !p-3 flex items-center gap-2.5">
         <span class="w-2 h-2 rounded-full flex-shrink-0"
               :class="statusColor(p.status)"></span>
         <div class="min-w-0">
-          <p class="text-white text-sm font-medium truncate">{{ p.name }}</p>
+          <p class="text-gray-800 text-sm font-medium truncate">{{ p.name }}</p>
           <p class="text-gray-500 text-xs truncate">{{ p.note }}</p>
         </div>
       </div>

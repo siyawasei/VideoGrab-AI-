@@ -26,7 +26,7 @@ class RegisterRequest(BaseModel):
 
 
 class LoginRequest(BaseModel):
-    username: str
+    account: str  # 用户名或邮箱
     password: str
 
 
@@ -111,10 +111,13 @@ async def register(req: RegisterRequest, db: Session = Depends(get_db)):
 
 @router.post("/login")
 async def login(req: LoginRequest, db: Session = Depends(get_db)):
-    """用户登录"""
-    user = db.query(User).filter(User.username == req.username).first()
+    """用户登录（支持用户名或邮箱）"""
+    # 支持用户名或邮箱登录
+    user = db.query(User).filter(
+        (User.username == req.account) | (User.email == req.account)
+    ).first()
     if not user or not pwd_context.verify(req.password, user.password_hash):
-        raise HTTPException(status_code=401, detail="用户名或密码错误")
+        raise HTTPException(status_code=401, detail="用户名/邮箱或密码错误")
 
     token = create_access_token({"sub": user.id})
     return {
