@@ -48,3 +48,12 @@ server.log
 
 # 调试文件
 page_debug.html
+
+# 截图和临时文件
+screenshots/
+*.docx
+lyt_net_vs_my_model_updated.png
+
+# Agent 临时文件
+.agents/
+tools/
